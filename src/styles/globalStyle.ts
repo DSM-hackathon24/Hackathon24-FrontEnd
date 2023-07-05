@@ -24,7 +24,7 @@ export const GlobalStyle = createGlobalStyle`
     body {
         background-color: ${({ theme }) => theme.colors.background1};
 
-        max-width: 100%;
+        max-width: 100vw;
 
         overflow: hidden;
         overflow-y: auto;

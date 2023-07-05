@@ -22,7 +22,6 @@ export const MapPage = () => {
   const listRef = useRef<HTMLUListElement>(null);
   return (
     <Wrapper>
-      <SearchInput listRef={listRef} />
       <Map />
       {isAddingFireHydrant ? (
         <PlaceAdd />

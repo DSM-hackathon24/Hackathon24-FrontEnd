@@ -59,7 +59,7 @@ const Button = styled.button<CollapseProps>`
   picture {
     transform: rotate(90deg);
 
-    @keyframes spinRight {
+    @keyframes turnLeft {
       from {
         transform: rotate(90deg);
       }
@@ -68,7 +68,7 @@ const Button = styled.button<CollapseProps>`
       }
     }
 
-    @keyframes spinLeft {
+    @keyframes turnRight {
       from {
         transform: rotate(180deg);
       }
@@ -79,12 +79,12 @@ const Button = styled.button<CollapseProps>`
 
     ${(props) =>
       props.visible === "false" && props.animation === "true"
-        ? "animation: spinRight 0.3s ease;"
+        ? "animation: turnLeft 0.3s ease;"
         : "transform: rotate(90deg);"}
     ${(props) =>
       props.visible === "true" &&
       (props.animation === "true"
-        ? "animation: spinLeft 0.3s ease;"
+        ? "animation: turnRight 0.3s ease;"
         : "transform: rotate(180deg);")}
   }
 `;
@@ -95,7 +95,7 @@ const List = styled.ul<CollapseProps>`
     font-size: ${({ theme }) => theme.fontSizes.text};
   }
 
-  @keyframes openToggleMenu {
+  @keyframes openCollapseMenu {
     from {
       height: 0;
       opacity: 0;
@@ -106,7 +106,7 @@ const List = styled.ul<CollapseProps>`
     }
   }
 
-  @keyframes closeToggleMenu {
+  @keyframes closeCollapseMenu {
     from {
       height: 87px;
       opacity: 1;
@@ -120,10 +120,10 @@ const List = styled.ul<CollapseProps>`
   ${(props) =>
     props.visible === "false" &&
     (props.animation === "true"
-      ? "animation: openToggleMenu 0.3s ease;"
+      ? "animation: openCollapseMenu 0.3s ease;"
       : "height:0; opacity:0;")}
   ${(props) =>
     props.visible === "true" &&
     props.animation === "true" &&
-    "animation: closeToggleMenu 0.3s ease;"}
+    "animation: closeCollapseMenu 0.3s ease;"}
 `;
