@@ -112,7 +112,7 @@ export const Map = () => {
     }
   }, [mapRef.current]);
   return (
-    <Wrapper id="map" ref={mapRef}>
+    <Wrapper ref={mapRef}>
       권한을 기다리는 중...
       {map && <ToggleMenu />}
     </Wrapper>
