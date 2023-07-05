@@ -1,5 +1,5 @@
 export interface PlaceRequestType {
-  type: "지상식" | "지하식" | "옥내";
+  type: string;
   available?: boolean;
   year?: number;
   x?: number;

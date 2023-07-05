@@ -1,9 +1,12 @@
 import { styled } from "styled-components";
 import { ArrowImg } from "../../assets/images";
 import { useEffect, useState } from "react";
-import { Select } from "../Select";
 
-export const CollapseMenu = () => {
+interface CollapseMenu {
+  children: JSX.Element | JSX.Element[];
+}
+
+export const CollapseMenu = ({ children }: CollapseMenu) => {
   const [collapseState, setCollapseState] = useState<boolean>(false);
   const [collapseViewState, setCollapseViewState] = useState<boolean>(false);
   const isToggleAnimationPlaying = collapseViewState;
@@ -33,12 +36,7 @@ export const CollapseMenu = () => {
         </picture>
       </Button>
       <List visible={`${collapseState}`} animation={`${collapseViewState}`}>
-        <li>
-          소화전 구분{" "}
-          <Select id="type" options={["지상식", "지하식", "옥내"]} />
-        </li>
-        <li>사용 가능 여부</li>
-        <li>설치 연도</li>
+        {children}
       </List>
     </div>
   );

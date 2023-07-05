@@ -12,6 +12,7 @@ import {
   ClickLocationStateAtomType,
 } from "../../../atoms/clickLocationState";
 import { CollapseMenu } from "../../CollapseMenu";
+import { Select } from "../../Select";
 export const PlaceAdd = () => {
   const clickLocationState = useRecoilValue<ClickLocationStateAtomType>(
     ClickLocationStateAtom
@@ -61,7 +62,21 @@ export const PlaceAdd = () => {
             }
           />
         </InputField>
-        <CollapseMenu />
+        <CollapseMenu>
+          <li>
+            소화전 구분{" "}
+            <Select
+              id="type"
+              options={["지상식", "지하식", "옥내"]}
+              value={inputState.type}
+              setValue={(newType: string) =>
+                setInputState((prevState) => ({ ...prevState, type: newType }))
+              }
+            />
+          </li>
+          <li>사용 가능 여부</li>
+          <li>설치 연도</li>
+        </CollapseMenu>
       </ul>
     </Wrapper>
   );
@@ -78,7 +93,7 @@ const Wrapper = styled.article`
 
   margin-bottom: 32px;
 
-  ul {
+  > ul {
     width: 100%;
 
     display: flex;
