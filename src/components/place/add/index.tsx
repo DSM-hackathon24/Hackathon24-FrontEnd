@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ArrowImg, GoBackImg } from "../../../assets/images";
+import { GoBackImg } from "../../../assets/images";
 import { useEffect, useState } from "react";
 import { PlaceRequestType } from "../../../types/place/request";
 import { useRecoilValue, useSetRecoilState } from "recoil";

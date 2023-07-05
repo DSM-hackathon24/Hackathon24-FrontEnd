@@ -1,6 +1,6 @@
-import { PlaceType } from "../../types/place/response";
+import { PlaceResponseType } from "../../types/place/response";
 
-export const dummyPlaces: PlaceType[] = [
+export const dummyPlaces: PlaceResponseType[] = [
   {
     id: 1,
     foundDate: "2023-06-24",

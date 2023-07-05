@@ -1,7 +1,7 @@
 import { atom } from "recoil";
-import { PlaceType } from "../../types/place/response";
+import { PlaceResponseType } from "../../types/place/response";
 
-export const PlaceStateAtom = atom<PlaceType[]>({
+export const PlaceStateAtom = atom<PlaceResponseType[]>({
   key: "placeState",
   default: [],
 });
