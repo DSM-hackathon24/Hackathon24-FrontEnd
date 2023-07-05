@@ -1,18 +1,17 @@
 import styled from "styled-components";
-import { dummyPosts } from "../../../libs/constants/dummyPosts";
 import { isHttpsUrl } from "../../../libs/constants/isHttpsUrl";
 import { useParams } from "react-router-dom";
-import { PostLoadResponseType } from "../../../types/post";
 import { CommentList } from "../../../components/comment/list";
+import { useBoardQuery } from "../../../hooks/useBoard";
 
 export const CommunityDetailPage = () => {
   const { id } = useParams();
-  const post = dummyPosts.filter(
-    (v) => v.id === parseInt(id as string)
-  )[0] as PostLoadResponseType;
+  const boardQuery = useBoardQuery({ boardId: parseInt(id as string) });
+  console.log(boardQuery.data);
+  const hasData = boardQuery.data;
   const formattedContent =
-    post.content &&
-    post.content
+    hasData &&
+    boardQuery.data.content
       .split(/\n/)
       .map((v) => v.trim())
       .filter((v) => v);
@@ -20,10 +19,10 @@ export const CommunityDetailPage = () => {
   return (
     <Wrapper>
       <article>
-        <h1>{post.title}</h1>
+        <h1>{hasData && boardQuery.data.title}</h1>
         <div>
-          <span>{`작성자 ${post.writer}`}</span>
-          <span>{post.writeDate}</span>
+          <span>{`작성자 ${hasData && boardQuery.data.writer}`}</span>
+          <span>{hasData && boardQuery.data.date}</span>
         </div>
         {isContentNotEmpty &&
           formattedContent.map((v, i) =>
@@ -67,6 +66,9 @@ const Wrapper = styled.main`
 
     h1 {
       width: 90vw;
+
+      color: ${({ theme }) => theme.colors.background7};
+      font-size: ${({ theme }) => theme.fontSizes.title};
     }
 
     div {
@@ -78,12 +80,18 @@ const Wrapper = styled.main`
       justify-content: space-between;
 
       border-bottom: 1px solid ${({ theme }) => theme.colors.background3};
+
+      span {
+        color: ${({ theme }) => theme.colors.background5};
+        font-size: ${({ theme }) => theme.fontSizes.subText};
+      }
     }
 
     p {
       width: 90vw;
 
-      font-weight: 600;
+      color: ${({ theme }) => theme.colors.background7};
+      font-size: ${({ theme }) => theme.fontSizes.text};
     }
 
     figure {

@@ -1,11 +1,34 @@
 import styled from "styled-components";
 import { CommunityPageMenu } from "../../../components/CommunityMenu";
+import { ToggleMenu } from "../../../components/ToggleMenu";
+import { useNavigate } from "react-router-dom";
+import { WriteImg } from "../../../assets/images";
 
 export const CommunityPage = () => {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <h1>심심 탈출 넘버원</h1>
       <CommunityPageMenu />
+      <ToggleMenu>
+        <li>
+          <button
+            aria-label="게시글 추가"
+            type="button"
+            onClick={() => {
+              navigate("/community/create");
+            }}
+          >
+            <figure>
+              <picture>
+                <source type="image/svg+xml" srcSet={WriteImg} />
+                <img alt="" width="24" height="24" />
+              </picture>
+              <figcaption>게시글 추가</figcaption>
+            </figure>
+          </button>
+        </li>
+      </ToggleMenu>
     </Wrapper>
   );
 };

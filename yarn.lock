@@ -1675,7 +1675,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2":
+  version: 7.22.6
+  resolution: "@babel/runtime@npm:7.22.6"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: e585338287c4514a713babf4fdb8fc2a67adcebab3e7723a739fc62c79cfda875b314c90fd25f827afb150d781af97bc16c85bfdbfa2889f06053879a1ddb597
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.8.4":
   version: 7.22.5
   resolution: "@babel/runtime@npm:7.22.5"
   dependencies:
@@ -3481,7 +3490,6 @@ __metadata:
     react: ^18.2.0
     react-cookie: ^4.1.1
     react-dom: ^18.2.0
-    react-intersection-observer: ^9.5.1
     react-query: ^3.39.3
     react-router-dom: ^6.13.0
     recoil: ^0.7.7
@@ -4375,15 +4383,6 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
-  languageName: node
-  linkType: hard
-
-"react-intersection-observer@npm:^9.5.1":
-  version: 9.5.1
-  resolution: "react-intersection-observer@npm:9.5.1"
-  peerDependencies:
-    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 862d531757a9eea1f0eff072be21e6c11d8d9f78c5918609ac8164899365484ce983a50f9ed45c861753d407d2066b3198cf6444506d0c6e4212a4a361995643
   languageName: node
   linkType: hard
 

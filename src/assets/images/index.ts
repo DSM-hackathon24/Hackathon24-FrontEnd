@@ -5,3 +5,4 @@ export { default as UserImg } from "./user.svg";
 export { default as CreateImg } from "./create.svg";
 export { default as HydrantImg } from "./hydrant.svg";
 export { default as ArrowImg } from "./arrow.svg";
+export { default as WriteImg } from "./write.svg";

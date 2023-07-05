@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { dummyCategories } from "../../../libs/constants/dummyCategories";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { CategoryStateAtomType } from "../../../atoms/categoryState";
 import { CategoryStateAtom } from "../../../atoms/categoryState";
 import {
   ScrollStateAtom,
@@ -11,14 +10,14 @@ import {
 import { CategoryItem } from "../item";
 
 interface CategoryListProps {
-  listRef: React.RefObject<HTMLUListElement>;
+  listRef?: React.RefObject<HTMLUListElement>;
 }
 
 export const CategoryList = ({ listRef }: CategoryListProps) => {
   const setScrollState =
     useSetRecoilState<ScrollStateAtomType>(ScrollStateAtom);
   const [categoryState, setCategoryState] =
-    useRecoilState<CategoryStateAtomType>(CategoryStateAtom);
+    useRecoilState<string>(CategoryStateAtom);
   const [scrollable, setScrollable] = useState<boolean>(false);
   const categoryRef = useRef<HTMLUListElement>(null);
   useEffect(() => {
@@ -33,13 +32,11 @@ export const CategoryList = ({ listRef }: CategoryListProps) => {
         <CategoryItem
           key={`category${i}`}
           category={v}
-          active={v === categoryState.category}
+          active={v === categoryState}
           onClick={() => {
-            if (v !== categoryState.category) {
-              setCategoryState((prevState) => {
-                return { ...prevState, category: v };
-              });
-              if (listRef.current) listRef.current.scrollTop = 0;
+            if (v !== categoryState) {
+              setCategoryState(v);
+              if (listRef && listRef.current) listRef.current.scrollTop = 0;
               setScrollState((prevState) => ({ ...prevState, position: 0 }));
             }
           }}

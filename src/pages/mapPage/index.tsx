@@ -4,18 +4,15 @@ import {
   SelectedStateAtom,
   SelectedStateAtomType,
 } from "../../atoms/selectedState";
-import { PlaceStateAtom } from "../../atoms/placeState";
 import { Map } from "../../components/Map";
 import { PlaceDetail } from "../../components/place/detail";
 import { PlaceList } from "../../components/place/list";
 import { useRef } from "react";
-import { PlaceResponseType } from "../../types/place/response";
 import { PlaceAdd } from "../../components/place/add";
 
 export const MapPage = () => {
   const selectedState =
     useRecoilValue<SelectedStateAtomType>(SelectedStateAtom);
-  const placeState = useRecoilValue<PlaceResponseType[]>(PlaceStateAtom);
   const isSelectedSet = selectedState.id !== 0;
   const isAddingFireHydrant = selectedState.id === -1;
   const listRef = useRef<HTMLUListElement>(null);
@@ -25,9 +22,7 @@ export const MapPage = () => {
       {isAddingFireHydrant ? (
         <PlaceAdd />
       ) : isSelectedSet ? (
-        <PlaceDetail
-          place={placeState.filter((v) => v.id == selectedState.id)[0]}
-        />
+        <PlaceDetail />
       ) : (
         <PlaceList listRef={listRef} />
       )}

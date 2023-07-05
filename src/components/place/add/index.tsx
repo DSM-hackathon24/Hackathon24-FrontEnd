@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { GoBackImg } from "../../../assets/images";
 import { useEffect, useState } from "react";
-import { PlaceRequestType } from "../../../types/place/request";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   SelectedStateAtom,
@@ -13,31 +12,60 @@ import {
 } from "../../../atoms/clickLocationState";
 import { CollapseMenu } from "../../CollapseMenu";
 import { Select } from "../../Select";
+import { mapCreate } from "../../../libs/apis/map/create";
+import { ToastStateAtom, ToastStateAtomType } from "../../../atoms/toastState";
+
 export const PlaceAdd = () => {
   const clickLocationState = useRecoilValue<ClickLocationStateAtomType>(
     ClickLocationStateAtom
   );
+  const setToastState = useSetRecoilState<ToastStateAtomType>(ToastStateAtom);
   const setSelectedState =
     useSetRecoilState<SelectedStateAtomType>(SelectedStateAtom);
-  const [inputState, setInputState] = useState<PlaceRequestType>({
-    type: "지상식",
-    available: undefined,
-    year: undefined,
-    x: undefined,
-    y: undefined,
+  const [inputState, setInputState] = useState<MapCreateRequestType>({
+    latitude: undefined,
+    longitude: undefined,
+    availability: undefined,
+    sortation: "지상식",
+    installation: undefined,
   });
+  const [warningState, setWarningState] = useState<string>("");
+  const validateForm = () => {
+    if (
+      inputState.latitude === undefined ||
+      inputState.longitude === undefined
+    ) {
+      setWarningState("location");
+      return false;
+    } else setWarningState("");
+    return true;
+  };
   useEffect(
     () =>
       setInputState((prevState) => ({
         ...prevState,
-        x: clickLocationState.x,
-        y: clickLocationState.y,
+        latitude: clickLocationState.x,
+        longitude: clickLocationState.y,
       })),
     [clickLocationState]
   );
   return (
-    <Wrapper>
-      <Confirm>소화전 추가</Confirm>
+    <Wrapper
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (validateForm()) {
+          mapCreate(inputState);
+          setSelectedState({ id: 0, x: 0, y: 0 });
+          setToastState({
+            animateState: true,
+            showState: false,
+            message: "등록된 장소는 새로고침 후 표시됩니다.",
+            toastId: new Date().getTime(),
+          });
+        }
+      }}
+    >
+      <Confirm type="submit">소화전 추가</Confirm>
       <button
         aria-label="뒤로가기"
         type="button"
@@ -49,28 +77,39 @@ export const PlaceAdd = () => {
         </picture>
       </button>
       <ul>
-        <InputField empty={`${!inputState.x && !inputState.y}`}>
-          <label htmlFor="location">소화전 위치</label>
+        <InputField empty={`${!inputState.latitude && !inputState.longitude}`}>
+          <label htmlFor="location">
+            소화전 위치
+            {warningState === "location" && <span>필수 입력란입니다.</span>}
+          </label>
           <input
             id="location"
             disabled
             type="text"
             placeholder="지도를 클릭하여 위치를 설정하세요."
             value={
-              inputState.x && inputState.y
-                ? `${inputState.x.toFixed(3)}..., ${inputState.y.toFixed(3)}...`
+              inputState.latitude && inputState.longitude
+                ? `${inputState.latitude.toFixed(
+                    3
+                  )}..., ${inputState.longitude.toFixed(3)}...`
                 : ""
             }
           />
         </InputField>
         <SelectField>
-          <p>소화전 구분</p>
+          <p>
+            소화전 구분
+            {warningState === "sortation" && <span>필수 입력란입니다.</span>}
+          </p>
           <Select
             id="type"
             options={["지상식", "지하식", "옥내"]}
-            value={inputState.type}
+            value={inputState.sortation}
             setValue={(newType: string) =>
-              setInputState((prevState) => ({ ...prevState, type: newType }))
+              setInputState((prevState) => ({
+                ...prevState,
+                sortation: newType,
+              }))
             }
           />
         </SelectField>
@@ -81,16 +120,16 @@ export const PlaceAdd = () => {
               id="available"
               options={["모름", "가능", "불가"]}
               value={
-                inputState.available
+                inputState.availability
                   ? "가능"
-                  : inputState.available === false
+                  : inputState.availability === false
                   ? "불가"
                   : "모름"
               }
               setValue={(newAvailable: string) =>
                 setInputState((prevState) => ({
                   ...prevState,
-                  available:
+                  availability:
                     newAvailable === "가능"
                       ? true
                       : newAvailable === "불가"
@@ -102,8 +141,8 @@ export const PlaceAdd = () => {
           </SelectField>
           <InputField
             empty={`${
-              inputState.year === undefined ||
-              inputState.year.toString().length === 0
+              inputState.installation === undefined ||
+              inputState.installation.toString().length === 0
             }`}
           >
             <label htmlFor="year">설치 연도</label>
@@ -114,7 +153,11 @@ export const PlaceAdd = () => {
               min="1900"
               max={`${new Date().getFullYear()}`}
               maxLength={4}
-              value={inputState.year === undefined ? "" : inputState.year}
+              value={
+                inputState.installation === undefined
+                  ? ""
+                  : inputState.installation
+              }
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replace(
                   /[^0-9.]/g,
@@ -151,7 +194,7 @@ export const PlaceAdd = () => {
                 ) {
                   setInputState((prevState) => ({
                     ...prevState,
-                    year: data,
+                    installation: `${data}`,
                   }));
                 }
               }}
@@ -182,7 +225,7 @@ const Confirm = styled.button`
   z-index: 4;
 `;
 
-const Wrapper = styled.article`
+const Wrapper = styled.form`
   position: relative;
 
   width: 90vw;
@@ -220,6 +263,15 @@ const InputField = styled.li<InputFieldProps>`
     font-size: ${({ theme }) => theme.fontSizes.text};
   }
 
+  label {
+    span {
+      margin-left: 4px;
+
+      color: ${({ theme }) => theme.colors.main};
+      font-size: ${({ theme }) => theme.fontSizes.description};
+    }
+  }
+
   input {
     margin-top: 4px;
     padding-bottom: 4px;
@@ -250,5 +302,12 @@ const SelectField = styled.li`
 
     color: ${({ theme }) => theme.colors.background7};
     font-size: ${({ theme }) => theme.fontSizes.text};
+
+    span {
+      margin-left: 4px;
+
+      color: ${({ theme }) => theme.colors.main};
+      font-size: ${({ theme }) => theme.fontSizes.description};
+    }
   }
 `;

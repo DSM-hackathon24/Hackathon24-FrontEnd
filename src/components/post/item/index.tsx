@@ -1,25 +1,25 @@
 import styled from "styled-components";
-import { PostLoadResponseType } from "../../../types/post";
+import { BoardLoadResponseType } from "../../../types/board/load/response";
+import { useNavigate } from "react-router-dom";
 
 interface PostItemProps {
-  post: PostLoadResponseType;
+  post: BoardLoadResponseType;
 }
 
 export const PostItem = ({ post }: PostItemProps) => {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <button
         type="button"
-        onClick={() =>
-          (window as any).webkit.messageHandlers.navigate.postMessage(post.id)
-        }
+        onClick={() => navigate(`/community/${post.boardId}`)}
       >
         <div>
           <h3>{post.title}</h3>
-          <p>{post.preview}</p>
+          <p>{post.content}</p>
         </div>
         <span>{`${post.writer ? `작성자 : ${post.writer} | ` : ""}${
-          post.writeDate
+          post.date
         }`}</span>
       </button>
     </Wrapper>

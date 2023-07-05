@@ -1,21 +1,19 @@
 import styled from "styled-components";
 import { CheckImg, GoBackImg, UserImg } from "../../../assets/images";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   SelectedStateAtom,
   SelectedStateAtomType,
 } from "../../../atoms/selectedState";
 import { useState } from "react";
-import { PlaceResponseType } from "../../../types/place/response";
+import { useMapQuery } from "../../../hooks/useMap";
 
-interface PlaceDetailProps {
-  place: PlaceResponseType;
-}
-
-export const PlaceDetail = ({ place }: PlaceDetailProps) => {
-  const setSelectedState =
-    useSetRecoilState<SelectedStateAtomType>(SelectedStateAtom);
-  const isFoundByAdmin = place.foundBy === undefined;
+export const PlaceDetail = () => {
+  const [selectedState, setSelectedState] =
+    useRecoilState<SelectedStateAtomType>(SelectedStateAtom);
+  const mapQuery = useMapQuery({ mapId: selectedState.id });
+  const hasData = mapQuery.data;
+  const isFoundByAdmin = hasData && !mapQuery.data.writer;
   const [toggleState, setToggleState] = useState<{ x: boolean; y: boolean }>({
     x: false,
     y: false,
@@ -44,32 +42,40 @@ export const PlaceDetail = ({ place }: PlaceDetailProps) => {
                 <img alt="" />
               </picture>
             </figure>
-            {isFoundByAdmin ? `검증됨` : `${place.foundBy}에 의해 추가됨`}
+            {hasData &&
+              (isFoundByAdmin
+                ? `검증됨`
+                : `${mapQuery.data.writer}에 의해 추가됨`)}
           </p>
-          <span>{place.foundDate}</span>
+          <span>{undefined || "2023-07-05"}</span>
         </div>
       </h1>
       <ul>
         <li>
           <p>소화전 구분</p>
           <b />
-          <p>{place.type}</p>
+          <p>{hasData && mapQuery.data.sortation}</p>
         </li>
         <li>
           <p>사용 가능 여부</p>
           <b />
           <p>
-            {place.available === true
-              ? "가능"
-              : place.available === false
-              ? "불가"
-              : "정보가 없습니다."}
+            {hasData &&
+              (mapQuery.data.availability === true
+                ? "가능"
+                : mapQuery.data.availability === false
+                ? "불가"
+                : "정보가 없습니다.")}
           </p>
         </li>
         <li>
           <p>설치 연도</p>
           <b />
-          <p>{place.year ? `${place.year}년` : "정보가 없습니다."}</p>
+          <p>
+            {hasData && mapQuery.data.installation
+              ? `${mapQuery.data.installation}년`
+              : "정보가 없습니다."}
+          </p>
         </li>
         <li
           onClick={() =>
@@ -79,9 +85,10 @@ export const PlaceDetail = ({ place }: PlaceDetailProps) => {
           <p>위도</p>
           <b />
           <p>
-            {toggleState.x
-              ? place.x
-              : `${Math.floor(place.x * 1000) / 1000}...`}
+            {hasData &&
+              (toggleState.x
+                ? mapQuery.data.latitude
+                : `${Math.floor(mapQuery.data.latitude * 1000) / 1000}...`)}
           </p>
           {!toggleState.x && <span>(클릭하여 더 보기)</span>}
         </li>
@@ -93,9 +100,10 @@ export const PlaceDetail = ({ place }: PlaceDetailProps) => {
           <p>경도</p>
           <b />
           <p>
-            {toggleState.y
-              ? place.y
-              : `${Math.floor(place.y * 1000) / 1000}...`}
+            {hasData &&
+              (toggleState.y
+                ? mapQuery.data.longitude
+                : `${Math.floor(mapQuery.data.longitude * 1000) / 1000}...`)}
           </p>
           {!toggleState.y && <span>(클릭하여 더 보기)</span>}
         </li>

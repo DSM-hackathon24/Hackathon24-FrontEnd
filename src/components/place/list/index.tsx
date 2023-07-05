@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { useEffect } from "react";
-import { SearchStateAtom } from "../../../atoms/searchState";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useEffect, useRef } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   SelectedStateAtom,
   SelectedStateAtomType,
@@ -11,20 +10,23 @@ import {
   ScrollStateAtom,
   ScrollStateAtomType,
 } from "../../../atoms/scrollState";
-import { PlaceResponseType } from "../../../types/place/response";
+import { MapLoadListResponseType } from "../../../types/map/loadList/response";
+import { useMapListQuery } from "../../../hooks/useMapList";
 
 interface PlaceListProps {
   listRef: React.RefObject<HTMLUListElement>;
 }
 
 export const PlaceList = ({ listRef }: PlaceListProps) => {
-  const placeState = useRecoilValue<PlaceResponseType[]>(PlaceStateAtom);
-  const searchState = useRecoilValue<string>(SearchStateAtom);
+  const mapListQuery = useMapListQuery();
+  const [placeState, setPlaceState] =
+    useRecoilState<MapLoadListResponseType[]>(PlaceStateAtom);
   const setSelectedState =
     useSetRecoilState<SelectedStateAtomType>(SelectedStateAtom);
   const [scrollState, setScrollState] =
     useRecoilState<ScrollStateAtomType>(ScrollStateAtom);
-  const isSearchStateSet = searchState !== "";
+  const hasData = mapListQuery.data && mapListQuery.data.length > 0;
+  const isRendered = useRef<boolean>(false);
   useEffect(
     () =>
       scrollState.page === "place"
@@ -32,6 +34,16 @@ export const PlaceList = ({ listRef }: PlaceListProps) => {
         : setScrollState({ page: "place", position: 0 }),
     []
   );
+  useEffect(() => {
+    if (
+      hasData &&
+      (placeState.length === 0 ||
+        (placeState[0] && placeState[0].distance === undefined))
+    ) {
+      isRendered.current = true;
+      setPlaceState(mapListQuery.data);
+    }
+  }, [mapListQuery.data]);
   return (
     <Wrapper
       ref={listRef}
@@ -39,50 +51,30 @@ export const PlaceList = ({ listRef }: PlaceListProps) => {
         setScrollState({ page: "place", position: e.currentTarget.scrollTop })
       }
     >
-      {isSearchStateSet
-        ? [...placeState]
-            .filter((v) => v.type.includes(searchState))
-            .sort((a, b) => a.distance! - b.distance!)
-            .map((v, i, o) => (
-              <li key={`place${i}`}>
-                <button
-                  type="button"
-                  aria-label="장소 상세보기"
-                  onClick={() =>
-                    setSelectedState({
-                      id: v.id,
-                      x: v.x,
-                      y: v.y,
-                    })
-                  }
-                >
-                  <p>{`${v.type} 소화전`}</p>
-                  <span>{`${v.distance?.toFixed(1)}km`}</span>
-                </button>
-                {i < o.length - 1 && <hr />}
-              </li>
-            ))
-        : [...placeState]
-            .sort((a, b) => (a.distance! > b.distance! ? 1 : -1))
-            .map((v, i) => (
-              <li key={`place${i}`}>
-                <button
-                  type="button"
-                  aria-label="장소 상세보기"
-                  onClick={() =>
-                    setSelectedState({
-                      id: v.id,
-                      x: v.x,
-                      y: v.y,
-                    })
-                  }
-                >
-                  <p>{`${v.type} 소화전`}</p>
-                  <span>{`${v.distance?.toFixed(1)}km`}</span>
-                </button>
-                {i < placeState.length - 1 && <hr />}
-              </li>
-            ))}
+      {hasData &&
+        placeState[0] &&
+        placeState[0].distance !== undefined &&
+        [...placeState]
+          .sort((a, b) => (a.distance! > b.distance! ? 1 : -1))
+          .map((v, i) => (
+            <li key={`place${i}`}>
+              <button
+                type="button"
+                aria-label="장소 상세보기"
+                onClick={() =>
+                  setSelectedState({
+                    id: v.mapId,
+                    x: v.latitude,
+                    y: v.longitude,
+                  })
+                }
+              >
+                <p>{`${v.sortation} 소화전`}</p>
+                <span>{`${v.distance?.toFixed(1)}km`}</span>
+              </button>
+              {i < placeState.length - 1 && <hr />}
+            </li>
+          ))}
     </Wrapper>
   );
 };

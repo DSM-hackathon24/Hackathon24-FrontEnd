@@ -1,15 +1,12 @@
 import { styled } from "styled-components";
-import { CreateImg, HydrantImg } from "../../assets/images";
+import { CreateImg } from "../../assets/images";
 import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import {
-  SelectedStateAtom,
-  SelectedStateAtomType,
-} from "../../atoms/selectedState";
 
-export const ToggleMenu = () => {
-  const setSelectedState =
-    useSetRecoilState<SelectedStateAtomType>(SelectedStateAtom);
+interface ToggleMenuProps {
+  children: JSX.Element | JSX.Element[];
+}
+
+export const ToggleMenu = ({ children }: ToggleMenuProps) => {
   const [toggleState, setToggleState] = useState<boolean>(false);
   const [toggleViewState, setToggleViewState] = useState<boolean>(false);
   const isToggleAnimationPlaying = toggleViewState;
@@ -25,23 +22,7 @@ export const ToggleMenu = () => {
     <div>
       {(toggleViewState || toggleState) && (
         <List visible={`${toggleState}`} animation={`${toggleViewState}`}>
-          <li>
-            <button
-              aria-label="소화전 추가"
-              type="button"
-              onClick={() => {
-                setSelectedState({ id: -1, x: 0, y: 0 });
-              }}
-            >
-              <figure>
-                <picture>
-                  <source type="image/svg+xml" srcSet={HydrantImg} />
-                  <img alt="" width="24" height="24" />
-                </picture>
-                <figcaption>소화전 추가</figcaption>
-              </figure>
-            </button>
-          </li>
+          {children}
         </List>
       )}
       <Button

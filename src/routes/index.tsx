@@ -1,3 +1,4 @@
+import { CommunityCreatePage } from "../pages/community/createPage";
 import { CommunityDetailPage } from "../pages/community/detailPage";
 import { CommunityPage } from "../pages/community/listPage";
 import { MapPage } from "../pages/mapPage";
@@ -15,6 +16,7 @@ export const rootRouter: RouterType[] = [
         <p>https://.../map</p>
         <p>https://.../community</p>
         <p>https://.../community/[id]</p>
+        <p>https://.../community/create</p>
       </main>
     ),
   },
@@ -25,6 +27,10 @@ export const rootRouter: RouterType[] = [
   {
     path: "/community",
     element: <CommunityPage />,
+  },
+  {
+    path: "/community/create",
+    element: <CommunityCreatePage />,
   },
   {
     path: "/community/:id",

@@ -1,11 +1,6 @@
 import { atom } from "recoil";
 
-export interface CategoryStateAtomType {
-  categoryResponses: string[];
-  category: string;
-}
-
-export const CategoryStateAtom = atom<CategoryStateAtomType>({
+export const CategoryStateAtom = atom<string>({
   key: "categoryState",
-  default: { categoryResponses: [], category: "전체" },
+  default: "전체",
 });

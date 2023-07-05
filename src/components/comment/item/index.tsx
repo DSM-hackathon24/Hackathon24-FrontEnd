@@ -1,37 +1,44 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
+import { CommentLoadResponseType } from "../../../types/comment/load/response";
 
-export const CommentItem = () => {
+interface CommentItemProps {
+  comment: CommentLoadResponseType;
+}
+
+export const CommentItem = ({ comment }: CommentItemProps) => {
   const [collapseState, setCollapseState] = useState<boolean>(false);
+  const [isExpendable, setIsExpendable] = useState<boolean>(false);
+  const phraseRef = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (phraseRef.current)
+      setIsExpendable(
+        phraseRef.current.scrollWidth > phraseRef.current.clientWidth
+      );
+  }, [phraseRef.current]);
   return (
     <Wrapper>
-      <figure>
-        <img
-          src="https://media.discordapp.net/attachments/1077850822341300244/1126062258326343780/Ellipse_34.png"
-          alt="프로필 사진"
-          width="36"
-          height="36"
-        />
-      </figure>
-      <div>
-        <h2>
-          백숙먹자했잖아<span>2023-07-05</span>
-        </h2>
-        <Phrase
-          expanded={`${collapseState}`}
-          onClick={() => setCollapseState(!collapseState)}
-        >
-          음식이 곧 약이고 약은 곧 음식이다,,,. 한사랑산악회#건강식품 #뉴틴 *본
-          영상은 뉴틴의 유료 광고를 포함하고 있습니다.
-        </Phrase>
-        {!collapseState && <span>자세히 보기</span>}
-      </div>
+      <h2>
+        {comment.writer}
+        <span>{comment.date}</span>
+      </h2>
+      <Phrase
+        ref={phraseRef}
+        expanded={`${collapseState}`}
+        onClick={() => setCollapseState(!collapseState)}
+      >
+        {comment.comment}
+      </Phrase>
+      {isExpendable && !collapseState && <span>자세히 보기</span>}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.li`
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
 
   h2 {
     display: flex;

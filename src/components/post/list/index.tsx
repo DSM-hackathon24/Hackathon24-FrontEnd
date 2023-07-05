@@ -1,17 +1,14 @@
 import styled from "styled-components";
 import { useEffect } from "react";
-import { dummyPosts } from "../../../libs/constants/dummyPosts";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   ScrollStateAtom,
   ScrollStateAtomType,
 } from "../../../atoms/scrollState";
 import { SearchStateAtom } from "../../../atoms/searchState";
-import {
-  CategoryStateAtom,
-  CategoryStateAtomType,
-} from "../../../atoms/categoryState";
 import { PostItem } from "../item";
+import { useBoardListQuery } from "../../../hooks/useBoardList";
+import { CategoryStateAtom } from "../../../atoms/categoryState";
 
 interface CommunityPagePostListProps {
   listRef: React.RefObject<HTMLUListElement>;
@@ -20,18 +17,24 @@ interface CommunityPagePostListProps {
 export const CommunityPagePostList = ({
   listRef,
 }: CommunityPagePostListProps) => {
-  const categoryState =
-    useRecoilValue<CategoryStateAtomType>(CategoryStateAtom);
+  const categoryState = useRecoilValue<string>(CategoryStateAtom);
+  const boardListQuery = useBoardListQuery({
+    category: categoryState === "전체" ? undefined : categoryState,
+  });
   const searchState = useRecoilValue<string>(SearchStateAtom);
   const [scrollState, setScrollState] =
     useRecoilState<ScrollStateAtomType>(ScrollStateAtom);
+  const hasData = boardListQuery.data && boardListQuery.data.length > 0;
   useEffect(
     () =>
       scrollState.page === "community"
         ? listRef.current?.scroll(0, scrollState.position)
-        : setScrollState({ page: "community", position: 0 }), // eslint-disable-next-line react-hooks/exhaustive-deps
+        : setScrollState({ page: "community", position: 0 }),
     []
   );
+  useEffect(() => {
+    console.log(categoryState);
+  }, [categoryState]);
   return (
     <Wrapper
       ref={listRef}
@@ -39,16 +42,10 @@ export const CommunityPagePostList = ({
         setScrollState({ page: "", position: e.currentTarget.scrollTop })
       }
     >
-      {dummyPosts
-        .filter(
-          (v) =>
-            v.title.includes(searchState) &&
-            (categoryState.category === "전체" ||
-              v.category === categoryState.category)
-        )
-        .map((v) => (
-          <PostItem key={`post${v.id}`} post={v} />
-        ))}
+      {hasData &&
+        [...boardListQuery.data]
+          .filter((v) => v.title.includes(searchState))
+          .map((v) => <PostItem key={`post${v.boardId}`} post={v} />)}
     </Wrapper>
   );
 };

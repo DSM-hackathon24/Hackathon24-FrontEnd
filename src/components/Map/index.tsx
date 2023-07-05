@@ -6,16 +6,17 @@ import {
   SelectedStateAtomType,
 } from "../../atoms/selectedState";
 import { PlaceStateAtom } from "../../atoms/placeState";
-import { dummyPlaces } from "../../libs/constants/dummyPlaces";
 import { ToggleMenu } from "../ToggleMenu";
-import { PlaceResponseType } from "../../types/place/response";
 import {
   ClickLocationStateAtom,
   ClickLocationStateAtomType,
 } from "../../atoms/clickLocationState";
+import { MapLoadListResponseType } from "../../types/map/loadList/response";
+import { HydrantImg } from "../../assets/images";
 
 export const Map = () => {
-  const setPlaceState = useSetRecoilState<PlaceResponseType[]>(PlaceStateAtom);
+  const [placeState, setPlaceState] =
+    useRecoilState<MapLoadListResponseType[]>(PlaceStateAtom);
   const setClickLocationState = useSetRecoilState<ClickLocationStateAtomType>(
     ClickLocationStateAtom
   );
@@ -24,6 +25,7 @@ export const Map = () => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const isRendered = useRef<boolean>(false);
   const mapRef = useRef<HTMLDivElement>(null);
+  const hasPlaceState = placeState.length > 0;
   useEffect(() => {
     setClickLocationState({ x: undefined, y: undefined });
     if (map && selected.id && selected.id !== -1) {
@@ -32,12 +34,12 @@ export const Map = () => {
     }
   }, [selected]);
   useEffect(() => {
-    if (map === null && mapRef.current) {
+    if (map === null && mapRef.current && hasPlaceState) {
       const initMap = (position: GeolocationPosition) => {
         if (!isRendered.current && mapRef.current) {
           isRendered.current = true;
           const markerImageUrl =
-            "https://cdn.discordapp.com/attachments/1077850822341300244/1125704829239558164/markers.webp";
+            "https://media.discordapp.net/attachments/1077850822341300244/1126208341811679332/Group_6997.webp";
           const newMap = new kakao.maps.Map(mapRef.current, {
             center: new kakao.maps.LatLng(
               position.coords.latitude,
@@ -58,7 +60,7 @@ export const Map = () => {
             new kakao.maps.Size(16, 16),
             {
               spriteOrigin: new kakao.maps.Point(0, 0),
-              spriteSize: new kakao.maps.Size(16, 32),
+              spriteSize: new kakao.maps.Size(32, 64),
             }
           );
           const adminMarker = new kakao.maps.MarkerImage(
@@ -66,31 +68,28 @@ export const Map = () => {
             new kakao.maps.Size(16, 16),
             {
               spriteOrigin: new kakao.maps.Point(0, 16),
-              spriteSize: new kakao.maps.Size(16, 32),
+              spriteSize: new kakao.maps.Size(32, 64),
+            }
+          );
+          const centerMarker = new kakao.maps.MarkerImage(
+            markerImageUrl,
+            new kakao.maps.Size(32, 32),
+            {
+              spriteOrigin: new kakao.maps.Point(0, 32),
+              spriteSize: new kakao.maps.Size(32, 64),
             }
           );
           const center = newMap.getCenter();
-          const initMarker = (place: PlaceResponseType) => {
-            const p1 = new kakao.maps.LatLng(place.x, place.y);
+          new kakao.maps.Marker({
+            map: newMap,
+            position: center,
+            image: centerMarker,
+          });
+          const initMarker = (place: MapLoadListResponseType) => {
+            const p1 = new kakao.maps.LatLng(place.latitude, place.longitude);
             const poly = new kakao.maps.Polyline({ path: [p1, center] });
             const distance = poly.getLength() / 1000;
-            setPlaceState((prevState) => {
-              return [
-                ...prevState,
-                {
-                  id: place.id,
-                  foundBy: place.foundBy,
-                  foundDate: place.foundDate,
-                  type: place.type,
-                  available: place.available,
-                  year: place.year,
-                  distance: distance,
-                  x: place.x,
-                  y: place.y,
-                },
-              ];
-            });
-            const isFoundByAdmin = place.foundBy === undefined;
+            const isFoundByAdmin = !place.writer;
             const marker = new kakao.maps.Marker({
               map: newMap,
               position: p1,
@@ -98,23 +97,51 @@ export const Map = () => {
             });
             kakao.maps.event.addListener(marker, "click", () =>
               setSelectedState({
-                id: place.id,
-                x: place.x,
-                y: place.y,
+                id: place.mapId,
+                x: place.latitude,
+                y: place.longitude,
               })
             );
+            return {
+              mapId: place.mapId,
+              latitude: place.latitude,
+              longitude: place.longitude,
+              sortation: place.sortation,
+              writer: place.writer,
+              distance: distance,
+            };
           };
-          dummyPlaces.forEach((v) => initMarker(v));
+          setPlaceState(placeState.map((v) => initMarker(v)));
           setMap(newMap);
         }
       };
       if (navigator.geolocation) navigator.geolocation.watchPosition(initMap);
     }
-  }, [mapRef.current]);
+  }, [mapRef.current, hasPlaceState]);
   return (
     <Wrapper ref={mapRef}>
       권한을 기다리는 중...
-      {map && <ToggleMenu />}
+      {map && (
+        <ToggleMenu>
+          <li>
+            <button
+              aria-label="소화전 추가"
+              type="button"
+              onClick={() => {
+                setSelectedState({ id: -1, x: 0, y: 0 });
+              }}
+            >
+              <figure>
+                <picture>
+                  <source type="image/svg+xml" srcSet={HydrantImg} />
+                  <img alt="" width="24" height="24" />
+                </picture>
+                <figcaption>소화전 추가</figcaption>
+              </figure>
+            </button>
+          </li>
+        </ToggleMenu>
+      )}
     </Wrapper>
   );
 };
