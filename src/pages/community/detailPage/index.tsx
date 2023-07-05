@@ -3,6 +3,7 @@ import { dummyPosts } from "../../../libs/constants/dummyPosts";
 import { isHttpsUrl } from "../../../libs/constants/isHttpsUrl";
 import { useParams } from "react-router-dom";
 import { PostLoadResponseType } from "../../../types/post";
+import { CommentList } from "../../../components/comment/list";
 
 export const CommunityDetailPage = () => {
   const { id } = useParams();
@@ -35,6 +36,7 @@ export const CommunityDetailPage = () => {
             )
           )}
       </article>
+      <CommentList />
     </Wrapper>
   );
 };

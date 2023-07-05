@@ -89,7 +89,7 @@ export const PlaceList = ({ listRef }: PlaceListProps) => {
 
 const Wrapper = styled.ul`
   width: 90vw;
-  height: calc(100vh - 529px);
+  height: calc(100vh - 456px);
 
   overflow-y: scroll;
 

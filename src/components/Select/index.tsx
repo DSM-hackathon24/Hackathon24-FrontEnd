@@ -5,7 +5,7 @@ import { ArrowImg } from "../../assets/images";
 interface SelectProps {
   id: string;
   options: string[];
-  value: string;
+  value?: string;
   setValue: (str: string) => void;
 }
 
@@ -92,7 +92,11 @@ const Wrapper = styled.div<WrapperProps>`
     li {
       width: 100%;
 
-      text-align: center;
+      button {
+        width: 100%;
+
+        text-align: center;
+      }
     }
   }
 `;

@@ -7,7 +7,6 @@ import {
 import { PlaceStateAtom } from "../../atoms/placeState";
 import { Map } from "../../components/Map";
 import { PlaceDetail } from "../../components/place/detail";
-import { SearchInput } from "../../components/SearchInput";
 import { PlaceList } from "../../components/place/list";
 import { useRef } from "react";
 import { PlaceResponseType } from "../../types/place/response";
@@ -22,7 +21,6 @@ export const MapPage = () => {
   const listRef = useRef<HTMLUListElement>(null);
   return (
     <Wrapper>
-      <SearchInput listRef={listRef} />
       <Map />
       {isAddingFireHydrant ? (
         <PlaceAdd />
@@ -41,12 +39,13 @@ const Wrapper = styled.main`
   padding-left: 5vw;
   padding-right: 5vw;
   margin-top: 16px;
-  margin-bottom: 70px;
 
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 16px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  overflow-y: auto;
 `;

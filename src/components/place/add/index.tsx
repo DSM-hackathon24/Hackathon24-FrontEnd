@@ -37,6 +37,7 @@ export const PlaceAdd = () => {
   );
   return (
     <Wrapper>
+      <Confirm>소화전 추가</Confirm>
       <button
         aria-label="뒤로가기"
         type="button"
@@ -62,27 +63,128 @@ export const PlaceAdd = () => {
             }
           />
         </InputField>
+        <SelectField>
+          <p>소화전 구분</p>
+          <Select
+            id="type"
+            options={["지상식", "지하식", "옥내"]}
+            value={inputState.type}
+            setValue={(newType: string) =>
+              setInputState((prevState) => ({ ...prevState, type: newType }))
+            }
+          />
+        </SelectField>
         <CollapseMenu>
-          <li>
-            소화전 구분{" "}
+          <SelectField>
+            <p>사용 가능 여부</p>
             <Select
-              id="type"
-              options={["지상식", "지하식", "옥내"]}
-              value={inputState.type}
-              setValue={(newType: string) =>
-                setInputState((prevState) => ({ ...prevState, type: newType }))
+              id="available"
+              options={["모름", "가능", "불가"]}
+              value={
+                inputState.available
+                  ? "가능"
+                  : inputState.available === false
+                  ? "불가"
+                  : "모름"
+              }
+              setValue={(newAvailable: string) =>
+                setInputState((prevState) => ({
+                  ...prevState,
+                  available:
+                    newAvailable === "가능"
+                      ? true
+                      : newAvailable === "불가"
+                      ? false
+                      : undefined,
+                }))
               }
             />
-          </li>
-          <li>사용 가능 여부</li>
-          <li>설치 연도</li>
+          </SelectField>
+          <InputField
+            empty={`${
+              inputState.year === undefined ||
+              inputState.year.toString().length === 0
+            }`}
+          >
+            <label htmlFor="year">설치 연도</label>
+            <input
+              id="year"
+              type="number"
+              placeholder="설치 연도를 입력해주세요. (ex. 2005)"
+              min="1900"
+              max={`${new Date().getFullYear()}`}
+              maxLength={4}
+              value={inputState.year === undefined ? "" : inputState.year}
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  /[^0-9.]/g,
+                  ""
+                );
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  /(\..*)\./g,
+                  "$1"
+                );
+                e.currentTarget.value = e.currentTarget.value.slice(
+                  0,
+                  e.currentTarget.maxLength
+                );
+              }}
+              onChange={(e) => {
+                if (e.currentTarget.value.length === 4) {
+                  if (
+                    parseInt(e.currentTarget.value) <
+                    parseInt(e.currentTarget.min)
+                  ) {
+                    e.currentTarget.value = e.currentTarget.min;
+                  }
+                  if (
+                    parseInt(e.currentTarget.value) >
+                    parseInt(e.currentTarget.max)
+                  ) {
+                    e.currentTarget.value = e.currentTarget.max;
+                  }
+                }
+                const data = e.currentTarget.valueAsNumber;
+                if (
+                  (data.toString().length > 1 && !isNaN(data)) ||
+                  data.toString().length <= 4
+                ) {
+                  setInputState((prevState) => ({
+                    ...prevState,
+                    year: data,
+                  }));
+                }
+              }}
+            />
+          </InputField>
         </CollapseMenu>
       </ul>
     </Wrapper>
   );
 };
 
+const Confirm = styled.button`
+  position: fixed;
+  left: 5vw;
+  bottom: 5vw;
+
+  background-color: ${({ theme }) => theme.colors.main};
+
+  width: 90vw;
+  height: 48px;
+
+  color: ${({ theme }) => theme.colors.background1};
+  font-size: ${({ theme }) => theme.fontSizes.subTitle};
+  font-weight: 600;
+  text-align: center;
+
+  border-radius: 10px;
+  z-index: 4;
+`;
+
 const Wrapper = styled.article`
+  position: relative;
+
   width: 90vw;
 
   display: flex;
@@ -91,7 +193,7 @@ const Wrapper = styled.article`
 
   ${({ theme }) => theme.commons.boxShadow}
 
-  margin-bottom: 32px;
+  margin-bottom: 86px;
 
   > ul {
     width: 100%;
@@ -134,5 +236,19 @@ const InputField = styled.li<InputFieldProps>`
     ::placeholder {
       color: ${({ theme }) => theme.colors.background4};
     }
+  }
+`;
+
+const SelectField = styled.li`
+  width: 100%;
+
+  display: flex;
+  gap: 8px;
+
+  > p {
+    transform: translateY(2px);
+
+    color: ${({ theme }) => theme.colors.background7};
+    font-size: ${({ theme }) => theme.fontSizes.text};
   }
 `;
