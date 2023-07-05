@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.svg" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="izzysden" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta
+      name="description"
+      content="소화전 커뮤니티 매핑 서비스로, 소화전의 위치를 공유하는 서비스입니다."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <link rel="apple-touch-icon" type="image/svg+xml" href="/192x192.svg" />
+    <meta name="theme-color" content="#EA3232" />
+    <link rel="manifest" href="/manifest.json" />
+    <base href="/" />
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%VITE_KAKAO_API_KEY%&libraries=services"
+    ></script>
+    <title>소화전</title>
+    <style>
+      @font-face {
+        font-family: "Pretendard";
+        src: url("/fonts/Pretendard/Pretendard.eot");
+        src: url("/fonts/Pretendard/Pretendard.eot?#iefix")
+            format("embedded-opentype"),
+          url("/fonts/Pretendard/Pretendard.woff2") format("woff2"),
+          url("/fonts/Pretendard/Pretendard.woff") format("woff"),
+          url("/fonts/Pretendard/Pretendard.ttf") format("truetype"),
+          url("/fonts/Pretendard/Pretendard.svg#Pretendard") format("svg");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "SFPro";
+        src: url("/fonts/SFPro/SF-Pro.ttf");
+        font-display: swap;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>

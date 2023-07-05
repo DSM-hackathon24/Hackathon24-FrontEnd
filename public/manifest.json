@@ -1,0 +1,40 @@
+{
+  "short_name": "소화전",
+  "name": "소화전",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "128x128 64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "192x192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "512x512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "192x192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "512x512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "scope": ".",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#EA3232",
+  "background_color": "#f8f8f8"
+}
