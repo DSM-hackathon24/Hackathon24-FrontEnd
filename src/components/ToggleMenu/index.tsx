@@ -75,7 +75,6 @@ const Button = styled.button<ToggleStateProps>`
   width: 48px;
   height: 48px;
 
-  will-change: transform;
   outline: none;
   z-index: 3;
   -webkit-tap-highlight-color: transparent;
@@ -120,11 +119,12 @@ const List = styled.ul<ToggleStateProps>`
   right: 16px;
 
   width: 48px;
+  height: 0;
 
   display: flex;
   justify-content: center;
 
-  will-change: height, opacity;
+  opacity: 0;
   z-index: 2;
 
   ${({ theme }) => theme.commons.boxShadow}
@@ -187,9 +187,10 @@ const List = styled.ul<ToggleStateProps>`
   ${(props) =>
     props.visible === "false" &&
     props.animation === "true" &&
-    "animation: openToggleMenu 0.3s ease;"}
+    "animation: openToggleMenu 0.25s ease;"}
   ${(props) =>
-    props.visible === "true" &&
-    props.animation === "true" &&
-    "animation: closeToggleMenu 0.3s ease;"}
+    props.visible === "true" && props.animation === "true"
+      ? "animation: closeToggleMenu 0.25s ease;"
+      : `height: 104px;
+      opacity: 1;`}
 `;
