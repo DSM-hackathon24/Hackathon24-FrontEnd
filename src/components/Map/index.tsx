@@ -122,7 +122,7 @@ export const Map = () => {
     <Wrapper ref={mapRef}>
       권한을 기다리는 중...
       {map && (
-        <ToggleMenu>
+        <ToggleMenu type="map">
           <li>
             <button
               aria-label="소화전 추가"

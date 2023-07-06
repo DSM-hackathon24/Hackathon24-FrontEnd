@@ -10,7 +10,7 @@ export const CommunityPage = () => {
     <Wrapper>
       <h1 id="title">심심 탈출 넘버원</h1>
       <CommunityPageMenu />
-      <ToggleMenu>
+      <ToggleMenu type="community">
         <li>
           <button
             aria-label="게시글 추가"

@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 interface ToggleMenuProps {
   children: JSX.Element | JSX.Element[];
+  type: "map" | "community";
 }
 
-export const ToggleMenu = ({ children }: ToggleMenuProps) => {
+export const ToggleMenu = ({ children, type }: ToggleMenuProps) => {
   const [toggleState, setToggleState] = useState<boolean>(false);
   const [toggleViewState, setToggleViewState] = useState<boolean>(false);
   const isToggleAnimationPlaying = toggleViewState;
@@ -26,6 +27,7 @@ export const ToggleMenu = ({ children }: ToggleMenuProps) => {
         </List>
       )}
       <Button
+        location={type}
         aria-label="메뉴 열기"
         type="button"
         onClick={() => {
@@ -43,13 +45,19 @@ export const ToggleMenu = ({ children }: ToggleMenuProps) => {
   );
 };
 
-interface ToggleStateProps {
+interface ButtonProps {
+  location: "map" | "community";
   visible: "true" | "false";
   animation: "true" | "false";
 }
 
-const Button = styled.button<ToggleStateProps>`
-  position: fixed;
+const Button = styled.button<ButtonProps>`
+  position: ${(props) =>
+    props.location === "map"
+      ? "absolute"
+      : props.location === "community"
+      ? "fixed"
+      : "relative"};
   bottom: 16px;
   right: 16px;
 
@@ -94,7 +102,12 @@ const Button = styled.button<ToggleStateProps>`
     "animation: spinLeft 0.3s ease;"}
 `;
 
-const List = styled.ul<ToggleStateProps>`
+interface ListProps {
+  visible: "true" | "false";
+  animation: "true" | "false";
+}
+
+const List = styled.ul<ListProps>`
   position: absolute;
   bottom: 16px;
   right: 16px;
