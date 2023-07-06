@@ -36,7 +36,7 @@ export const boardCreate = async ({
   );
   return await axios.post(`${getCookie("accToken")}/board/create`, formData, {
     headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_ACC_TOKEN}`,
+      Authorization: `Bearer ${getCookie("accToken")}`,
       "Content-Type": "multipart/form-data",
     },
   });

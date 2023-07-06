@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { isHttpsUrl } from "../../../libs/constants/isHttpsUrl";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CommentList } from "../../../components/comment/list";
 import { useBoardQuery } from "../../../hooks/useBoard";
+import { GoBackImg } from "../../../assets/images";
 
 export const CommunityDetailPage = () => {
   const { id } = useParams();
@@ -18,6 +19,12 @@ export const CommunityDetailPage = () => {
   const isContentNotEmpty = formattedContent;
   return (
     <Wrapper>
+      <Link to="/community">
+        <picture>
+          <source type="image/svg+xml" srcSet={GoBackImg} />
+          <img alt="" width="14" height="14" />
+        </picture>
+      </Link>
       <article>
         <h1>{hasData && boardQuery.data.title}</h1>
         <div>
@@ -53,6 +60,12 @@ const Wrapper = styled.main`
   align-items: center;
 
   overflow-y: auto;
+
+  > a {
+    margin-bottom: 4px;
+
+    width: 100%;
+  }
 
   article {
     padding-bottom: 32px;

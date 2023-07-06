@@ -4,9 +4,10 @@ import { CategoryStateAtom } from "../../../atoms/categoryState";
 import { useEffect, useState } from "react";
 import { Select } from "../../../components/Select";
 import { BoardCreateRequestType } from "../../../types/board/create/request";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastStateAtom, ToastStateAtomType } from "../../../atoms/toastState";
 import { useBoardMutation } from "../../../hooks/useBoardMutation";
+import { GoBackImg } from "../../../assets/images";
 
 export const CommunityCreatePage = () => {
   const boardMutation = useBoardMutation();
@@ -36,6 +37,12 @@ export const CommunityCreatePage = () => {
   }, []);
   return (
     <Wrapper>
+      <Link to="/community">
+        <picture>
+          <source type="image/svg+xml" srcSet={GoBackImg} />
+          <img alt="" width="14" height="14" />
+        </picture>
+      </Link>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -133,6 +140,12 @@ const Wrapper = styled.main`
   gap: 8px;
 
   overflow-y: auto;
+
+  > a {
+    margin-bottom: 4px;
+
+    width: 100%;
+  }
 
   form {
     width: 100%;
