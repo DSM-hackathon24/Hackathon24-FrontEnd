@@ -8,7 +8,7 @@ export const CommunityPage = () => {
   const navigate = useNavigate();
   return (
     <Wrapper>
-      <h1>심심 탈출 넘버원</h1>
+      <h1 id="title">심심 탈출 넘버원</h1>
       <CommunityPageMenu />
       <ToggleMenu>
         <li>
