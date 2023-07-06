@@ -1,6 +1,6 @@
 export const genericQueryOptions = {
-  cacheTime: 20000, //86400000,
-  staleTime: 20000, //3600000,
+  cacheTime: 0, //86400000,
+  staleTime: 0, //3600000,
   refetchOnWindowFocus: false,
   retry: 0,
 };

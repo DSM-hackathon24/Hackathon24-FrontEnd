@@ -49,7 +49,7 @@ interface ToggleStateProps {
 }
 
 const Button = styled.button<ToggleStateProps>`
-  position: absolute;
+  position: fixed;
   bottom: 16px;
   right: 16px;
 
