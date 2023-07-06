@@ -59,7 +59,7 @@ export const PlaceAdd = () => {
           setToastState({
             animateState: true,
             showState: false,
-            message: "등록된 장소는 새로고침 후 표시됩니다.",
+            message: "등록된 장소는 앱 재시작 후 표시됩니다.",
             toastId: new Date().getTime(),
           });
         }
