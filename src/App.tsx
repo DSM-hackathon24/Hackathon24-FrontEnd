@@ -10,7 +10,7 @@ export const App = () => {
   const toastState = useRecoilValue<ToastStateAtomType>(ToastStateAtom);
   useEffect(() => {
     const ele = document.createElement("p");
-    const txtNode = document.createTextNode(import.meta.env.VITE_ACC_TOKEN);
+    const txtNode = document.createTextNode(getCookie("accToken"));
     ele.appendChild(txtNode);
     const element = document.getElementById("title");
     element?.appendChild(ele);
