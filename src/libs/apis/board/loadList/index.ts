@@ -10,7 +10,7 @@ export const boardLoadList = async ({ category }: BoardLoadListRequestType) =>
     }`,
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
       },
       params: {
         value:

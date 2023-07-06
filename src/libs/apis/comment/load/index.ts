@@ -8,7 +8,7 @@ export const commentLoad = async ({ boardId }: CommentLoadRequestType) =>
     `${import.meta.env.VITE_BASE_URL}/comment/${boardId}/list`,
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
       },
     }
   );

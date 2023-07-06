@@ -8,7 +8,7 @@ export const mapLoad = async ({ mapId }: MapLoadRequestType) =>
     `${import.meta.env.VITE_BASE_URL}/map/list/${mapId}`,
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
       },
     }
   );

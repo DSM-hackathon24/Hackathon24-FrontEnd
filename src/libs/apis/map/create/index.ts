@@ -14,7 +14,7 @@ export const mapCreate = async (map: MapCreateRequestType) =>
     },
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
       },
     }
   );

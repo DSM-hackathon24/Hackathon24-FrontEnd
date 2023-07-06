@@ -8,7 +8,7 @@ export const boardLoad = async ({ boardId }: BoardLoadRequestType) =>
     `${import.meta.env.VITE_BASE_URL}/board/detail/${boardId}`,
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
       },
     }
   );

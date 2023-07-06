@@ -39,7 +39,7 @@ export const boardCreate = async ({
     formData,
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
         "Content-Type": "multipart/form-data",
       },
     }

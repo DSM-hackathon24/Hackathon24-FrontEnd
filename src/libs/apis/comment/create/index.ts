@@ -11,7 +11,7 @@ export const commentCreate = async ({
     { comment: comment },
     {
       headers: {
-        Authorization: `Bearer ${getCookie("accessToken")}`,
+        Authorization: `Bearer ${getCookie("accToken")}`,
       },
     }
   );
