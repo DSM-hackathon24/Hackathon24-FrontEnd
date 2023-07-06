@@ -34,10 +34,14 @@ export const boardCreate = async ({
       type: "application/json",
     })
   );
-  return await axios.post(`${getCookie("accToken")}/board/create`, formData, {
-    headers: {
-      Authorization: `Bearer ${getCookie("accToken")}`,
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/board/create`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${getCookie("accToken")}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 };
